@@ -1,47 +1,85 @@
 ﻿using DevFreela.Application.InputModels;
 using DevFreela.Application.Services.Interfaces;
 using DevFreela.Application.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DevFreela.Core.Entities;
+using DevFreela.Infrastructure.Persistence;
 
 namespace DevFreela.Application.Services.Implementations
 {
     public class ProjectService : IProjectService
     {
-        int IProjectService.Create(NewProjectInputModel newProjectInputModel)
+        private readonly DevFreelaDbContext _dbContext;
+        public ProjectService(DevFreelaDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public int Create(NewProjectInputModel newProjectInputModel)
+        {
+            var project = new Project(newProjectInputModel.Title, newProjectInputModel.Description, newProjectInputModel.IdClient, newProjectInputModel.IdFreelancer, newProjectInputModel.TotalCost);
+
+            _dbContext.Projects.Add(project);
+
+            return project.Id;
+        }
+
+        public void CreateComment(CreateCommentInputModel inputModel)
+        {
+            var comment = new ProjectComment(inputModel.Content, inputModel.IdProject, inputModel.IdUser);
+
+            _dbContext.ProjectComments.Add(comment);
+        }
+
+        public void Delete(int id)
+        {
+            var project = _dbContext.Projects.SingleOrDefault(p => p.Id == id);
+
+            if (project != null)
+            {
+                project.Cancel();
+            }
+        }
+
+        public void Finish(int id)
         {
             throw new NotImplementedException();
         }
 
-        void IProjectService.Delete(int id)
+        public List<ProjectViewModel> GetAll(string query)
+        {
+            var projects = _dbContext.Projects;
+
+            var projectsViewModel = projects
+                .Select(p => new ProjectViewModel(p.Title)).ToList();
+
+            return projectsViewModel;
+        }
+
+        public ProjectDetailsViewModel GetById(int id)
+        {
+            var project = _dbContext.Projects.SingleOrDefault(p => p.Id == id);
+
+            if (project != null)
+            {
+                return
+                    new ProjectDetailsViewModel(
+                            project.Title,
+                            project.Description,
+                            project.IdClient,
+                            project.IdFreelancer,
+                            project.TotalCost
+                            );
+            }
+
+            return new ProjectDetailsViewModel("", "", 0, 0, 0);
+        }
+
+        public void Started(int id)
         {
             throw new NotImplementedException();
         }
 
-        void IProjectService.Finish(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        List<ProjectViewModel> IProjectService.GetAll(string query)
-        {
-            throw new NotImplementedException();
-        }
-
-        ProjectDetailsViewModel IProjectService.GetAll(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IProjectService.Started(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IProjectService.Update(UpdateProjectInputModel inputModel)
+        public void Update(UpdateProjectInputModel inputModel)
         {
             throw new NotImplementedException();
         }

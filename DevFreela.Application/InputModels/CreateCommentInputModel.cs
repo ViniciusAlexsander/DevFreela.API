@@ -1,6 +1,6 @@
-﻿namespace DevFreela.API.Models
+﻿namespace DevFreela.Application.InputModels
 {
-    public class CreateCommentModel
+    public class CreateCommentInputModel
     {
         public string Content { get; set; }
         public int IdProject { get; set; }

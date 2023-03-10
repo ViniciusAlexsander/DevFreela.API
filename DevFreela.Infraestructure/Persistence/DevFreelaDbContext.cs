@@ -1,9 +1,4 @@
 ﻿using DevFreela.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevFreela.Infrastructure.Persistence
 {
@@ -29,10 +24,15 @@ namespace DevFreela.Infrastructure.Persistence
                 new Skill("Js"),
                 new Skill("Ts"),
             };
+            ProjectComments = new List<ProjectComment>
+            {
+                new ProjectComment("C#", 1, 1),
+            };
         }
 
         public List<Project> Projects { get; set; }
         public List<User> Users { get; set; }
         public List<Skill> Skills { get; set; }
+        public List<ProjectComment> ProjectComments { get; set; }
     }
 }
