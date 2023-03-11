@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DevFreela.Application.Services.Implementations
 {
@@ -17,12 +16,13 @@ namespace DevFreela.Application.Services.Implementations
             _dbContext = dbContext;
         }
 
-        List<SkillViewModel> ISkillService.GetAll()
+        public List<SkillViewModel> GetAll()
         {
             var skills = _dbContext.Skills;
 
             var skillsViewModel = skills
-                .Select(s => new SkillViewModel(s.Id, s.Description)).ToList();
+                .Select(s => new SkillViewModel(s.Id, s.Description))
+                .ToList();
 
             return skillsViewModel;
         }

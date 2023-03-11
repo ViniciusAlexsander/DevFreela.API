@@ -10,8 +10,8 @@
             Active = true;
 
             Skills = new List<UserSkill>();
-            OwnedProjects = List<Project>();
-            FreelanceProjects = List<Project>();
+            OwnedProjects = new List<Project>();
+            FreelanceProjects = new List<Project>();
             CreatedAt = DateTime.Now;
         }
 
