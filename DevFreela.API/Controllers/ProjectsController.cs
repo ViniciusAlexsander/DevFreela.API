@@ -4,7 +4,9 @@ using DevFreela.Application.Commands.DeleteProject;
 using DevFreela.Application.Commands.UpdateProject;
 using DevFreela.Application.InputModels;
 using DevFreela.Application.Queriess.GetAllProjects;
+using DevFreela.Application.Services.Implementations;
 using DevFreela.Application.Services.Interfaces;
+using DevFreela.Core.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +16,13 @@ namespace DevFreela.API.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectService _projectService;
+        private readonly IPaymentService _paymentService;
         private readonly IMediator _mediator;
 
-        public ProjectsController(IProjectService projectService, IMediator mediator)
+        public ProjectsController(IProjectService projectService, IPaymentService paymentService, IMediator mediator)
         {
             _projectService = projectService;
+            _paymentService = paymentService;
             _mediator = mediator;
         }
 
@@ -104,9 +108,9 @@ namespace DevFreela.API.Controllers
 
         // api/projects/1/finish
         [HttpPut("{id}/finish")]
-        public IActionResult Finish(int id)
+        public IActionResult Finish([FromBody] PaymentInfoDto paymentInfoDto)
         {
-            _projectService.Finish(id);
+            _paymentService.ProcessPayment(paymentInfoDto);
 
             return NoContent();
         }
